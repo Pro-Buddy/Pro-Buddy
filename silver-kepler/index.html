@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pro Buddy — Confusion to Execution | AI Project Idea Evaluator</title>
+    <meta name="description"
+        content="Pro Buddy is an AI-powered platform that evaluates student project ideas for hackathons and academics. Analyze feasibility, innovation, and industry alignment instantly.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <!-- ===== AUTH OVERLAY ===== -->
+    <div class="auth-overlay" id="authOverlay">
+        <div class="auth-particles-bg"></div>
+        <div class="auth-container">
+            <div class="auth-brand">
+                <span class="logo-icon">⚡</span>
+                <span class="logo-text">Pro Buddy</span>
+            </div>
+            <p class="auth-tagline">From Confusion to Execution</p>
+
+            <!-- Login Form -->
+            <div class="auth-card" id="loginCard">
+                <h2 class="auth-title">Welcome Back</h2>
+                <p class="auth-subtitle">Sign in to continue your journey</p>
+                <form id="loginForm" class="auth-form">
+                    <div class="auth-field">
+                        <label for="loginEmail">Email</label>
+                        <div class="auth-input-wrap">
+                            <svg class="auth-input-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 4l-10 8L2 4"/></svg>
+                            <input type="email" id="loginEmail" placeholder="you@example.com" required>
+                        </div>
+                    </div>
+                    <div class="auth-field">
+                        <label for="loginPassword">Password</label>
+                        <div class="auth-input-wrap">
+                            <svg class="auth-input-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+                            <input type="password" id="loginPassword" placeholder="Enter your password" required>
+                            <button type="button" class="auth-toggle-pw" id="toggleLoginPw" tabindex="-1">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                            </button>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-lg btn-full auth-submit" id="loginBtn">
+                        <span class="btn-text">Sign In</span>
+                        <span class="btn-loading" style="display:none;"><span class="spinner"></span> Signing in...</span>
+                    </button>
+                </form>
+                <div class="auth-divider"><span>or</span></div>
+                <button class="btn btn-ghost btn-lg btn-full auth-social" id="googleSignIn">
+                    <svg width="20" height="20" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+                    Continue with Google
+                </button>
+                <p class="auth-switch">Don't have an account? <a href="#" id="showSignup">Create one</a></p>
+            </div>
+
+            <!-- Signup Form -->
+            <div class="auth-card" id="signupCard" style="display:none;">
+                <h2 class="auth-title">Create Account</h2>
+                <p class="auth-subtitle">Join Pro Buddy and start evaluating ideas</p>
+                <form id="signupForm" class="auth-form">
+                    <div class="auth-field">
+                        <label for="signupName">Full Name</label>
+                        <div class="auth-input-wrap">
+                            <svg class="auth-input-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                            <input type="text" id="signupName" placeholder="Your full name" required>
+                        </div>
+                    </div>
+                    <div class="auth-field">
+                        <label for="signupEmail">Email</label>
+                        <div class="auth-input-wrap">
+                            <svg class="auth-input-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 4l-10 8L2 4"/></svg>
+                            <input type="email" id="signupEmail" placeholder="you@example.com" required>
+                        </div>
+                    </div>
+                    <div class="auth-field">
+                        <label for="signupPassword">Password</label>
+                        <div class="auth-input-wrap">
+                            <svg class="auth-input-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+                            <input type="password" id="signupPassword" placeholder="Min 6 characters" required minlength="6">
+                            <button type="button" class="auth-toggle-pw" id="toggleSignupPw" tabindex="-1">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                            </button>
+                        </div>
+                        <div class="password-strength" id="pwStrength">
+                            <div class="pw-bar"><div class="pw-fill" id="pwFill"></div></div>
+                            <span class="pw-label" id="pwLabel"></span>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-lg btn-full auth-submit" id="signupBtn">
+                        <span class="btn-text">Create Account</span>
+                        <span class="btn-loading" style="display:none;"><span class="spinner"></span> Creating...</span>
+                    </button>
+                </form>
+                <p class="auth-switch">Already have an account? <a href="#" id="showLogin">Sign in</a></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== MAIN APP (hidden until login) ===== -->
+    <div class="app-wrapper" id="appWrapper" style="display:none;">
+
+    <!-- Particle Background -->
+    <canvas id="particleCanvas"></canvas>
+
+    <!-- Navigation -->
+    <nav id="navbar">
+        <div class="nav-container">
+            <a href="#" class="nav-logo" id="navLogo">
+                <span class="logo-icon">⚡</span>
+                <span class="logo-text">Pro Buddy</span>
+            </a>
+            <div class="nav-links">
+                <a href="#home" class="nav-link active" id="navHome">Home</a>
+                <a href="#evaluate" class="nav-link" id="navEvaluate">Evaluate</a>
+                <a href="#features" class="nav-link" id="navFeatures">Features</a>
+                <a href="#how-it-works" class="nav-link" id="navHowItWorks">How It Works</a>
+            </div>
+            <div class="nav-right">
+                <button class="nav-cta" id="navCtaBtn">Get Started</button>
+                <div class="user-menu" id="userMenu">
+                    <button class="user-avatar-btn" id="userAvatarBtn">
+                        <div class="user-avatar" id="userAvatar">V</div>
+                        <svg class="avatar-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+                    </button>
+                    <div class="user-dropdown" id="userDropdown">
+                        <div class="dropdown-user-info">
+                            <div class="dropdown-avatar" id="dropdownAvatar">V</div>
+                            <div>
+                                <div class="dropdown-name" id="dropdownName">User</div>
+                                <div class="dropdown-email" id="dropdownEmail">user@mail.com</div>
+                            </div>
+                        </div>
+                        <div class="dropdown-divider"></div>
+                        <a href="#profile" class="dropdown-item" id="dropdownProfile">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                            My Profile
+                        </a>
+                        <a href="#" class="dropdown-item" id="dropdownHistory">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+                            Evaluation History
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" class="dropdown-item dropdown-logout" id="dropdownLogout">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                            Sign Out
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero-section">
+        <div class="hero-content">
+            <div class="hero-badge" id="heroBadge">
+                <span class="badge-dot"></span>
+                AI-Powered Idea Evaluation
+            </div>
+            <h1 class="hero-title" id="heroTitle">
+                From <span class="gradient-text">Confusion</span><br>
+                to <span class="gradient-text-alt">Execution</span>
+            </h1>
+            <p class="hero-subtitle" id="heroSubtitle">
+                Stop guessing. Start building what matters. Pro Buddy analyzes your project ideas
+                with AI — evaluating feasibility, innovation, and industry fit — so you can win
+                hackathons and create real-world impact.
+            </p>
+            <div class="hero-actions">
+                <button class="btn btn-primary btn-lg" id="heroEvaluateBtn" onclick="scrollToSection('evaluate')">
+                    <span>Evaluate Your Idea</span>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M5 12h14M12 5l7 7-7 7" />
+                    </svg>
+                </button>
+                <button class="btn btn-ghost btn-lg" id="heroLearnBtn" onclick="scrollToSection('how-it-works')">
+                    Learn How It Works
+                </button>
+            </div>
+
+        </div>
+        <div class="hero-visual">
+            <div class="floating-card card-1" id="floatingCard1">
+                <div class="fc-icon">🎯</div>
+                <div class="fc-text">Difficulty: <span class="fc-score medium">Moderate</span></div>
+            </div>
+            <div class="floating-card card-2" id="floatingCard2">
+                <div class="fc-icon">�</div>
+                <div class="fc-text">Success: <span class="fc-score high">85%</span></div>
+            </div>
+            <div class="floating-card card-3" id="floatingCard3">
+                <div class="fc-icon">✨</div>
+                <div class="fc-text">Uniqueness: <span class="fc-score high">92%</span></div>
+            </div>
+            <div class="floating-card card-4" id="floatingCard4">
+                <div class="fc-icon">🛠️</div>
+                <div class="fc-text">Tech Stack: <span class="fc-score high">Matched</span></div>
+            </div>
+            <div class="orbit-ring ring-1"></div>
+            <div class="orbit-ring ring-2"></div>
+            <div class="orbit-ring ring-3"></div>
+            <div class="central-orb" id="centralOrb">
+                <span>🧠</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features-section">
+        <div class="section-container">
+            <div class="section-header">
+                <span class="section-tag">Why Pro Buddy?</span>
+                <h2 class="section-title">Five Dimensions of<br><span class="gradient-text">Intelligent Analysis</span>
+                </h2>
+                <p class="section-desc">Our AI evaluates your idea across five critical dimensions, giving you a 360°
+                    view of your project's potential.</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card" id="featureDifficulty">
+                    <div class="feature-icon-wrap">
+                        <div class="feature-icon">🎯</div>
+                    </div>
+                    <h3>Difficulty Level</h3>
+                    <p>Assesses the overall complexity of your project — from beginner-friendly to expert-level — so you
+                        know what you're getting into.</p>
+                    <div class="feature-tag">Complexity Check</div>
+                </div>
+                <div class="feature-card" id="featureSuccess">
+                    <div class="feature-icon-wrap">
+                        <div class="feature-icon">📈</div>
+                    </div>
+                    <h3>Success Probability</h3>
+                    <p>Estimates the likelihood of successfully completing and delivering the project based on scope,
+                        team, and resources.</p>
+                    <div class="feature-tag">Confidence Score</div>
+                </div>
+                <div class="feature-card" id="featureUniqueness">
+                    <div class="feature-icon-wrap">
+                        <div class="feature-icon">✨</div>
+                    </div>
+                    <h3>Uniqueness</h3>
+                    <p>Evaluates how original and creative your idea is compared to existing solutions — standing out
+                        matters.</p>
+                    <div class="feature-tag">Innovation Score</div>
+                </div>
+                <div class="feature-card" id="featureTechKnowledge">
+                    <div class="feature-icon-wrap">
+                        <div class="feature-icon">🧠</div>
+                    </div>
+                    <h3>Tech Knowledge (Skills)</h3>
+                    <p>Identifies the skill sets needed to build your project and evaluates required expertise level
+                        across technologies.</p>
+                    <div class="feature-tag">Skill Assessment</div>
+                </div>
+                <div class="feature-card" id="featureTechStack">
+                    <div class="feature-icon-wrap">
+                        <div class="feature-icon">🛠️</div>
+                    </div>
+                    <h3>Tech Stack Required</h3>
+                    <p>Recommends the ideal technology stack for your project and evaluates how well your current
+                        choices match the requirements.</p>
+                    <div class="feature-tag">Stack Readiness</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section id="how-it-works" class="how-section">
+        <div class="section-container">
+            <div class="section-header">
+                <span class="section-tag">Simple Process</span>
+                <h2 class="section-title">How <span class="gradient-text">Pro Buddy</span> Works</h2>
+                <p class="section-desc">Three simple steps to transform your raw idea into a structured, evaluated, and
+                    actionable project plan.</p>
+            </div>
+            <div class="steps-container">
+                <div class="step-card" id="step1">
+                    <div class="step-number">01</div>
+                    <div class="step-content">
+                        <h3>Describe Your Idea</h3>
+                        <p>Tell us about your project — the problem it solves, target audience, tech stack, and your
+                            goals. The more detail, the better the analysis.</p>
+                    </div>
+                    <div class="step-visual">📝</div>
+                </div>
+                <div class="step-connector">
+                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 5v14M5 12l7 7 7-7" />
+                    </svg>
+                </div>
+                <div class="step-card" id="step2">
+                    <div class="step-number">02</div>
+                    <div class="step-content">
+                        <h3>Pro Buddy Analyzes Everything</h3>
+                        <p>Our engine evaluates your idea across 5 dimensions — difficulty, success probability,
+                            uniqueness,
+                            required skills, and tech stack fit.</p>
+                    </div>
+                    <div class="step-visual">🤖</div>
+                </div>
+                <div class="step-connector">
+                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 5v14M5 12l7 7 7-7" />
+                    </svg>
+                </div>
+                <div class="step-card" id="step3">
+                    <div class="step-number">03</div>
+                    <div class="step-content">
+                        <h3>Get Actionable Insights</h3>
+                        <p>Receive detailed scores, gap analysis, improvement tips, differentiation strategies, and
+                            industry connections to take your idea forward.</p>
+                    </div>
+                    <div class="step-visual">🚀</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Evaluation Section -->
+    <section id="evaluate" class="evaluate-section">
+        <div class="section-container">
+            <div class="section-header">
+                <span class="section-tag">AI Evaluation Engine</span>
+                <h2 class="section-title">Evaluate Your <span class="gradient-text">Project Idea</span></h2>
+                <p class="section-desc">Fill in the details below and let Pro Buddy analyze your idea across all five
+                    dimensions.</p>
+            </div>
+
+            <div class="evaluate-layout">
+                <!-- Input Form -->
+                <div class="eval-form-container" id="evalFormContainer">
+                    <form id="evalForm" class="eval-form">
+                        <div class="form-group">
+                            <label for="projectTitle">Project Title <span class="required">*</span></label>
+                            <input type="text" id="projectTitle" placeholder="e.g., Smart Campus Navigator" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="problemStatement">Problem Statement <span class="required">*</span></label>
+                            <textarea id="problemStatement" rows="3"
+                                placeholder="What problem are you solving? Be specific." required></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="proposedSolution">Proposed Solution <span class="required">*</span></label>
+                            <textarea id="proposedSolution" rows="3"
+                                placeholder="How does your solution work? Mention key features." required></textarea>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="domain">Domain / Category <span class="required">*</span></label>
+                                <select id="domain" required>
+                                    <option value="">Select domain</option>
+                                    <option value="ai-ml">AI / Machine Learning</option>
+                                    <option value="web-dev">Web Development</option>
+                                    <option value="mobile">Mobile App</option>
+                                    <option value="iot">IoT / Hardware</option>
+                                    <option value="blockchain">Blockchain / Web3</option>
+                                    <option value="cybersecurity">Cybersecurity</option>
+                                    <option value="healthcare">HealthTech</option>
+                                    <option value="fintech">FinTech</option>
+                                    <option value="edtech">EdTech</option>
+                                    <option value="sustainability">Sustainability / GreenTech</option>
+                                    <option value="social-impact">Social Impact</option>
+                                    <option value="gaming">Gaming / AR / VR</option>
+                                    <option value="data-analytics">Data Analytics</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="teamSize">Team Size</label>
+                                <select id="teamSize">
+                                    <option value="1">Solo (1)</option>
+                                    <option value="2">Duo (2)</option>
+                                    <option value="3" selected>Small Team (3-4)</option>
+                                    <option value="5">Large Team (5+)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="techStack">Tech Stack <span class="required">*</span></label>
+                            <input type="text" id="techStack" placeholder="e.g., React, Node.js, MongoDB" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="targetAudience">Target Audience <span class="required">*</span></label>
+                            <input type="text" id="targetAudience"
+                                placeholder="e.g., College students, Small businesses" required>
+                        </div>
+
+
+                        <div class="form-group">
+                            <label for="uniqueFeatures">Unique Features / USP <span class="required">*</span></label>
+                            <textarea id="uniqueFeatures" rows="2"
+                                placeholder="What makes your project stand out from existing solutions?"
+                                required></textarea>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-lg btn-full" id="evaluateBtn">
+                            <span class="btn-text">🧠 Analyze with Pro Buddy</span>
+                            <span class="btn-loading" style="display:none;">
+                                <span class="spinner"></span> Analyzing...
+                            </span>
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Results Panel -->
+                <div class="eval-results-container" id="evalResultsContainer" style="display:none;">
+                    <div class="results-header">
+                        <h3 id="resultsProjectTitle">Project Analysis Results</h3>
+                        <button class="btn btn-ghost btn-sm" id="newEvalBtn" onclick="resetEvaluation()">
+                            ← New Evaluation
+                        </button>
+                    </div>
+
+                    <!-- Overall Score -->
+                    <div class="overall-score-card" id="overallScoreCard">
+                        <div class="overall-ring">
+                            <svg viewBox="0 0 120 120" class="score-ring-svg">
+                                <circle cx="60" cy="60" r="52" class="ring-bg" />
+                                <circle cx="60" cy="60" r="52" class="ring-progress" id="overallRingProgress" />
+                            </svg>
+                            <div class="ring-value" id="overallScoreValue">0</div>
+                        </div>
+                        <div class="overall-info">
+                            <h4>Overall Score</h4>
+                            <p id="overallVerdict" class="verdict">Analyzing...</p>
+                            <div class="verdict-tags" id="verdictTags"></div>
+                        </div>
+                    </div>
+
+                    <!-- Dimension Scores -->
+                    <div class="results-header-row">
+                        <h3>Dimension Analysis</h3>
+                        <button class="btn-text-only" id="howItWorksBtn">❓ How is this calculated?</button>
+                    </div>
+                    <div class="dimension-scores" id="dimensionScores">
+                        <div class="dimension-card" id="dimDifficulty">
+                            <div class="dim-header">
+                                <span class="dim-icon">🎯</span>
+                                <span class="dim-name">Difficulty Level</span>
+                                <span class="dim-score">0%</span>
+                            </div>
+                            <div class="dim-bar">
+                                <div class="dim-fill" data-score="0"></div>
+                            </div>
+                            <p class="dim-feedback"></p>
+                        </div>
+                        <div class="dimension-card" id="dimSuccess">
+                            <div class="dim-header">
+                                <span class="dim-icon">📈</span>
+                                <span class="dim-name">Success Probability</span>
+                                <span class="dim-score">0%</span>
+                            </div>
+                            <div class="dim-bar">
+                                <div class="dim-fill" data-score="0"></div>
+                            </div>
+                            <p class="dim-feedback"></p>
+                        </div>
+                        <div class="dimension-card" id="dimUniqueness">
+                            <div class="dim-header">
+                                <span class="dim-icon">✨</span>
+                                <span class="dim-name">Uniqueness</span>
+                                <span class="dim-score">0%</span>
+                            </div>
+                            <div class="dim-bar">
+                                <div class="dim-fill" data-score="0"></div>
+                            </div>
+                            <p class="dim-feedback"></p>
+                        </div>
+                        <div class="dimension-card" id="dimTechKnowledge">
+                            <div class="dim-header">
+                                <span class="dim-icon">🧠</span>
+                                <span class="dim-name">Tech Knowledge (Skills)</span>
+                                <span class="dim-score">0%</span>
+                            </div>
+                            <div class="dim-bar">
+                                <div class="dim-fill" data-score="0"></div>
+                            </div>
+                            <p class="dim-feedback"></p>
+                        </div>
+                        <div class="dimension-card" id="dimTechStack">
+                            <div class="dim-header">
+                                <span class="dim-icon">🛠️</span>
+                                <span class="dim-name">Tech Stack Required</span>
+                                <span class="dim-score">0%</span>
+                            </div>
+                            <div class="dim-bar">
+                                <div class="dim-fill" data-score="0"></div>
+                            </div>
+                            <p class="dim-feedback"></p>
+                        </div>
+                    </div>
+
+                    <!-- Insights Panel -->
+                    <div class="insights-panel" id="insightsPanel">
+                        <div class="insight-section" id="insightExistingSolutions">
+                            <h4>🔎 Known Existing Solutions</h4>
+                            <ul id="existingSolutionsList"></ul>
+                        </div>
+                        <div class="insight-section" id="insightStrengths">
+                            <h4>💪 Strengths</h4>
+                            <ul id="strengthsList"></ul>
+                        </div>
+                        <div class="insight-section" id="insightWeaknesses">
+                            <h4>⚠️ Areas for Improvement</h4>
+                            <ul id="weaknessesList"></ul>
+                        </div>
+                        <div class="insight-section" id="insightSuggestions">
+                            <h4>🎯 Differentiation Strategies</h4>
+                            <ul id="suggestionsList"></ul>
+                        </div>
+                        <div class="insight-section" id="insightIndustry">
+                            <h4>🏢 Industry Connections</h4>
+                            <div class="industry-cards" id="industryCards"></div>
+                        </div>
+                        <div class="insight-section" id="insightNextSteps">
+                            <h4>🚀 Recommended Next Steps</h4>
+                            <ol id="nextStepsList"></ol>
+                        </div>
+                        <div class="insight-section" id="insightConclusion">
+                            <h4>🏁 Final Conclusion</h4>
+                            <p id="finalConclusionText" class="conclusion-text"></p>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="results-actions">
+                        <button class="btn btn-primary" id="downloadReportBtn" onclick="downloadReport()">
+                            📄 Download Report
+                        </button>
+                        <button class="btn btn-secondary" id="shareResultsBtn" onclick="shareResults()">
+                            🔗 Share Results
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== Profile Section ===== -->
+    <section id="profile" class="profile-section" style="display:none;">
+        <div class="section-container">
+            <div class="profile-layout">
+                <!-- Profile Header Card -->
+                <div class="profile-header-card">
+                    <div class="profile-cover"></div>
+                    <div class="profile-info-row">
+                        <div class="profile-big-avatar" id="profileBigAvatar">V</div>
+                        <div class="profile-info">
+                            <h2 class="profile-name" id="profileName">User</h2>
+                            <p class="profile-email" id="profileEmail">user@mail.com</p>
+                            <div class="profile-badges">
+                                <span class="profile-badge badge-member">🎓 Member</span>
+                                <span class="profile-badge badge-eval" id="profileEvalCount">0 Evaluations</span>
+                            </div>
+                        </div>
+                        <button class="btn btn-ghost btn-sm" id="editProfileBtn">✏️ Edit Profile</button>
+                    </div>
+                </div>
+
+                <!-- Profile Edit Card (hidden by default) -->
+                <div class="profile-edit-card" id="profileEditCard" style="display:none;">
+                    <h3>Edit Profile</h3>
+                    <form id="editProfileForm" class="auth-form">
+                        <div class="auth-field">
+                            <label for="editName">Display Name</label>
+                            <div class="auth-input-wrap">
+                                <input type="text" id="editName" placeholder="Your name" required>
+                            </div>
+                        </div>
+                        <div class="auth-field">
+                            <label for="editBio">Bio</label>
+                            <div class="auth-input-wrap">
+                                <input type="text" id="editBio" placeholder="Short bio (optional)" maxlength="120">
+                            </div>
+                        </div>
+                        <div class="auth-field">
+                            <label for="editCollege">College / Organization</label>
+                            <div class="auth-input-wrap">
+                                <input type="text" id="editCollege" placeholder="e.g., IIT Delhi">
+                            </div>
+                        </div>
+                        <div class="profile-edit-actions">
+                            <button type="submit" class="btn btn-primary btn-sm">Save Changes</button>
+                            <button type="button" class="btn btn-ghost btn-sm" id="cancelEditBtn">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Profile Stats -->
+                <div class="profile-stats-grid">
+                    <div class="profile-stat-card">
+                        <div class="pstat-icon">📊</div>
+                        <div class="pstat-value" id="pstatTotal">0</div>
+                        <div class="pstat-label">Total Evaluations</div>
+                    </div>
+                    <div class="profile-stat-card">
+                        <div class="pstat-icon">🏆</div>
+                        <div class="pstat-value" id="pstatBest">—</div>
+                        <div class="pstat-label">Best Score</div>
+                    </div>
+                    <div class="profile-stat-card">
+                        <div class="pstat-icon">📈</div>
+                        <div class="pstat-value" id="pstatAvg">—</div>
+                        <div class="pstat-label">Average Score</div>
+                    </div>
+                    <div class="profile-stat-card">
+                        <div class="pstat-icon">📅</div>
+                        <div class="pstat-value" id="pstatJoined">—</div>
+                        <div class="pstat-label">Member Since</div>
+                    </div>
+                </div>
+
+                <!-- Evaluation History -->
+                <div class="profile-history">
+                    <div class="history-header">
+                        <h3>📜 Evaluation History</h3>
+                        <button class="btn btn-ghost btn-sm" id="clearHistoryBtn">Clear All</button>
+                    </div>
+                    <div class="history-list" id="historyList">
+                        <div class="history-empty" id="historyEmpty">
+                            <span class="history-empty-icon">📋</span>
+                            <p>No evaluations yet. Start by evaluating your first project idea!</p>
+                            <button class="btn btn-primary btn-sm" onclick="scrollToSection('evaluate'); showMainSections();">Evaluate Now</button>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="btn btn-ghost btn-lg btn-full" id="backToHomeBtn" onclick="showMainSections()" style="margin-top: 24px;">
+                    ← Back to Home
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="footer" class="footer">
+        <div class="footer-container">
+            <div class="footer-brand">
+                <span class="logo-icon">⚡</span>
+                <span class="logo-text">Pro Buddy</span>
+                <p class="footer-tagline">Confusion to Execution</p>
+            </div>
+            <div class="footer-links">
+                <a href="#home">Home</a>
+                <a href="#features">Features</a>
+                <a href="#evaluate">Evaluate</a>
+                <a href="#how-it-works">How It Works</a>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Pro Buddy. Built for students, by innovators.</p>
+            </div>
+        </div>
+    </footer>
+
+    </div> <!-- end #appWrapper -->
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast">
+        <span class="toast-icon">✅</span>
+        <span class="toast-message" id="toastMessage">Action completed!</span>
+    </div>
+
+    <!-- Calculation Explanation Modal -->
+    <div class="modal-backdrop" id="calcModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>📊 How We Calculate Scores</h3>
+                <button class="modal-close" id="closeModalBtn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="param-group">
+                    <h4>🎯 Difficulty Level</h4>
+                    <ul>
+                        <li>Number of features/modules</li>
+                        <li>Technology complexity (basic vs advanced)</li>
+                        <li>Integration level (single vs multiple systems)</li>
+                        <li>Learning required (known vs new tech)</li>
+                        <li>Dependency level (APIs, hardware)</li>
+                    </ul>
+                </div>
+                <div class="param-group">
+                    <h4>📈 Success Probability</h4>
+                    <ul>
+                        <li>Scope vs available time</li>
+                        <li>Team skill match</li>
+                        <li>Data/resource availability</li>
+                        <li>Demo feasibility</li>
+                        <li>Risk count (integration, data risks)</li>
+                    </ul>
+                </div>
+                <div class="param-group">
+                    <h4>✨ Uniqueness</h4>
+                    <ul>
+                        <li>Problem originality</li>
+                        <li>Solution approach novelty</li>
+                        <li>Technology combination rarity</li>
+                        <li>Target user specificity</li>
+                        <li>Existing solution similarity</li>
+                    </ul>
+                </div>
+                <div class="param-group">
+                    <h4>🧠 Tech Knowledge (Skills)</h4>
+                    <ul>
+                        <li>Required programming level</li>
+                        <li>Domain knowledge depth</li>
+                        <li>Algorithm/logic complexity</li>
+                        <li>Tool/framework familiarity</li>
+                        <li>System design understanding</li>
+                    </ul>
+                </div>
+                <div class="param-group">
+                    <h4>🛠️ Tech Stack Required</h4>
+                    <ul>
+                        <li>Frontend complexity</li>
+                        <li>Backend complexity</li>
+                        <li>Database/data handling level</li>
+                        <li>AI/ML or advanced tech usage</li>
+                        <li>Deployment & infrastructure needs</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="auth.js"></script>
+    <script src="app.js"></script>
+</body>
+
+</html>
