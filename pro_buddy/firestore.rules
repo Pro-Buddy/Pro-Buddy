@@ -1,0 +1,90 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Global Safety Net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Primitives
+    function isSignedIn() { return request.auth != null; }
+    function isValidId(id) { return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$'); }
+    function incoming() { return request.resource.data; }
+    function existing() { return resource.data; }
+
+    // Validation Helpers
+    function isValidUser(data) {
+      return data.keys().hasAll(['uid', 'email', 'name', 'createdAt', 'updatedAt']) &&
+             data.uid is string && data.uid == request.auth.uid &&
+             data.email is string && data.email.size() <= 200 &&
+             data.name is string && data.name.size() <= 100 &&
+             data.get('bio', '') is string && data.get('bio', '').size() <= 160 &&
+             data.get('college', '') is string && data.get('college', '').size() <= 100 &&
+             data.createdAt is timestamp &&
+             data.updatedAt is timestamp;
+    }
+
+    function isValidEvaluation(data) {
+      return data.keys().hasAll(['userId', 'title', 'overallScore', 'createdAt']) &&
+             data.userId is string && data.userId == request.auth.uid &&
+             data.title is string && data.title.size() <= 150 &&
+             data.get('domain', '') is string && data.get('domain', '').size() <= 50 &&
+             data.get('description', '') is string && data.get('description', '').size() <= 2000 &&
+             data.overallScore is number &&
+             data.get('verdict', '') is string && data.get('verdict', '').size() <= 500 &&
+             data.createdAt is timestamp;
+    }
+
+    function isValidActivity(data) {
+      return data.keys().hasAll(['userId', 'type', 'createdAt']) &&
+             data.userId is string && data.userId == request.auth.uid &&
+             data.type is string && (data.type == 'career' || data.type == 'study') &&
+             data.get('details', '') is string && data.get('details', '').size() <= 500 &&
+             data.createdAt is timestamp;
+    }
+
+    // Users Collection
+    match /users/{userId} {
+      allow get: if isSignedIn() && isValidId(userId) && request.auth.uid == userId;
+      // No allow list for users to prevent PII scraping
+      
+      allow create: if isSignedIn() && isValidId(userId) && request.auth.uid == userId &&
+                       isValidUser(incoming()) &&
+                       incoming().createdAt == request.time &&
+                       incoming().updatedAt == request.time &&
+                       incoming().keys().size() >= 5 && incoming().keys().size() <= 7;
+                       
+      allow update: if isSignedIn() && isValidId(userId) && request.auth.uid == userId &&
+                       isValidUser(incoming()) &&
+                       incoming().uid == existing().uid &&
+                       incoming().createdAt == existing().createdAt &&
+                       incoming().updatedAt == request.time &&
+                       incoming().diff(existing()).affectedKeys().hasOnly(['name', 'bio', 'college', 'updatedAt']);
+    }
+
+    // Evaluations Collection
+    match /evaluations/{evaluationId} {
+      allow get: if isSignedIn() && isValidId(evaluationId) && resource.data.userId == request.auth.uid;
+      allow list: if isSignedIn() && resource.data.userId == request.auth.uid;
+      
+      allow create: if isSignedIn() && isValidId(evaluationId) &&
+                       isValidEvaluation(incoming()) &&
+                       incoming().createdAt == request.time &&
+                       exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+                       incoming().keys().size() >= 4 && incoming().keys().size() <= 7;
+                       
+      allow delete: if isSignedIn() && isValidId(evaluationId) && existing().userId == request.auth.uid;
+    }
+
+    // Activities Collection
+    match /activities/{activityId} {
+      allow get: if isSignedIn() && isValidId(activityId) && resource.data.userId == request.auth.uid;
+      allow list: if isSignedIn() && resource.data.userId == request.auth.uid;
+      
+      allow create: if isSignedIn() && isValidId(activityId) &&
+                       isValidActivity(incoming()) &&
+                       incoming().createdAt == request.time &&
+                       exists(/databases/$(database)/documents/users/$(request.auth.uid));
+    }
+  }
+}
