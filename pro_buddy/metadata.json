@@ -1,0 +1,6 @@
+{
+  "name": "Pro Buddy",
+  "description": "AI-powered project idea evaluation platform — from confusion to execution",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
